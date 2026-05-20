@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [data, setData] = useState({ stats: [], records: [] });
-  const [lastScan, setLastScan] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [resetting, setResetting] = useState(false);
+  const [message, setMessage] = useState('');
 
   const fetchData = async () => {
     try {
@@ -14,6 +15,20 @@ export default function Home() {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const resetAttendance = async () => {
+    if (!confirm('Reset all attendance? This cannot be undone!')) return;
+    setResetting(true);
+    try {
+      await fetch('/api/attendance', { method: 'DELETE' });
+      setMessage('Attendance reset successfully!');
+      fetchData();
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err) {
+      setMessage('Reset failed!');
+    }
+    setResetting(false);
   };
 
   useEffect(() => {
@@ -36,19 +51,42 @@ export default function Home() {
     }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <h1 style={{ 
-          fontSize: '28px', 
-          margin: '0',
-          color: '#00d4ff'
-        }}>
+        <h1 style={{ fontSize: '28px', margin: '0', color: '#00d4ff' }}>
           🎓 Smart RFID Attendance System
         </h1>
         <p style={{ color: '#888', margin: '8px 0' }}>
           Real-time attendance tracking
         </p>
-        <p style={{ color: '#555', fontSize: '13px' }}>
-          Auto-refreshes every 3 seconds
-        </p>
+
+        {/* Reset Button */}
+        <button
+          onClick={resetAttendance}
+          disabled={resetting}
+          style={{
+            marginTop: '10px',
+            background: resetting ? '#555' : '#ff3c3c',
+            color: 'white',
+            border: 'none',
+            padding: '10px 30px',
+            borderRadius: '25px',
+            fontSize: '14px',
+            fontWeight: 'bold',
+            cursor: resetting ? 'not-allowed' : 'pointer'
+          }}
+        >
+          {resetting ? 'Resetting...' : '🔄 Reset Attendance'}
+        </button>
+
+        {/* Success Message */}
+        {message && (
+          <div style={{
+            marginTop: '10px',
+            color: '#00ff64',
+            fontWeight: 'bold'
+          }}>
+            ✅ {message}
+          </div>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -60,7 +98,7 @@ export default function Home() {
         flexWrap: 'wrap'
       }}>
         <div style={{
-          background: 'rgba(0, 212, 255, 0.1)',
+          background: 'rgba(0,212,255,0.1)',
           border: '1px solid #00d4ff',
           borderRadius: '12px',
           padding: '20px 30px',
@@ -74,7 +112,7 @@ export default function Home() {
         </div>
 
         <div style={{
-          background: 'rgba(0, 255, 100, 0.1)',
+          background: 'rgba(0,255,100,0.1)',
           border: '1px solid #00ff64',
           borderRadius: '12px',
           padding: '20px 30px',
@@ -88,7 +126,7 @@ export default function Home() {
         </div>
 
         <div style={{
-          background: 'rgba(255, 60, 60, 0.1)',
+          background: 'rgba(255,60,60,0.1)',
           border: '1px solid #ff3c3c',
           borderRadius: '12px',
           padding: '20px 30px',
@@ -107,7 +145,6 @@ export default function Home() {
         background: 'rgba(255,255,255,0.05)',
         borderRadius: '12px',
         overflow: 'hidden',
-        marginBottom: '30px',
         maxWidth: '800px',
         margin: '0 auto 30px auto'
       }}>
@@ -191,7 +228,7 @@ export default function Home() {
         </div>
         {data.records.length === 0 ? (
           <div style={{ padding: '40px', textAlign: 'center', color: '#555' }}>
-            No scans yet today. Scan a card to begin!
+            No scans yet. Scan a card to begin!
           </div>
         ) : (
           [...data.records].reverse().slice(0, 5).map((record, index) => (
