@@ -55,7 +55,7 @@ export default function Home() {
           🎓 Smart RFID Attendance System
         </h1>
         <p style={{ color: '#888', margin: '8px 0' }}>
-          Real-time attendance tracking
+          Real-time attendance tracking | Reset button below
         </p>
 
         {/* Reset Button */}
