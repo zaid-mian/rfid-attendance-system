@@ -168,17 +168,7 @@ The system currently supports 6 registered students for demonstration but is arc
 - ML-based attendance pattern analytics
 - OLED display to show student name on scan
 
-## Team
 
-**BSCS 6th – E1, Department of Computer Science, University of Agriculture, Faisalabad**
-Subject: Internet of Things · Resource Person: Ms. Rimla
-
-- M. Zaid Tahir — 2023-AG-10127
-- M. Huzaifa Khalid — 2023-AG-10112
-- Ali Hammad Subhnai — 2023-AG-10035
-- Fatima Shahzad — 2023-AG-10057
-- Shahreen Shahid — 2023-AG-10144
-- Nimra Iman — 2023-AG-10131
 
 ## References
 
